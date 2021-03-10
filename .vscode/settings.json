@@ -6,5 +6,7 @@
       "name": "myNeigbors",
       "database": "db.sqlite3"
     }
-  ]
+  ],
+  "python.pythonPath": "/home/kamiran/.pyenv/shims/python",
+  "python.linting.pylintEnabled": true
 }
