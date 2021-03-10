@@ -32,3 +32,7 @@ class Menu(models.Model):
     # added above if the category was deleted
     blank=True
   )
+  ingredients = models.ManyToManyField("ingredient",
+    related_name="menus",
+    related_query_name="menu"
+  )
