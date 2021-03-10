@@ -1,0 +1,23 @@
+[
+  {
+    "model": "my_neighbors_api.category",
+    "pk": 2,
+    "fields": {
+      "label": "Luunch"
+    }
+  },
+  {
+    "model": "my_neighbors_api.category",
+    "pk": 3,
+    "fields": {
+      "label": "Dinner"
+    }
+  },
+  {
+    "model": "my_neighbors_api.category",
+    "pk": 4,
+    "fields": {
+      "label": "Breakfast"
+    }
+  }  
+]
