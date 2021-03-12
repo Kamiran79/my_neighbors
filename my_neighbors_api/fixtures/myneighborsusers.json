@@ -1,0 +1,15 @@
+[
+  {
+      "model": "my_neighbors_api.myneighborsuser",
+      "pk": 1,
+      "fields": {
+          "user": 1,
+          "isChef": false,
+          "address": "334 Broadway",
+          "city": "Nashville",
+          "state": "TN",
+          "zipCode": "37112",
+          "profile_imgage_url": ""
+      }
+  }
+]
