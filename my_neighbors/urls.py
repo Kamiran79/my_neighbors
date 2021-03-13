@@ -13,12 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django import urls
 from django.contrib import admin
+from django.db import router
 from django.urls import path
 from django.conf.urls import include
 from my_neighbors_api.views import register_user, login_user
+from rest_framework import routers
+from my_neighbors_api.views import MenuView
+
+router = routers.DefaultRouter(trailing_slash=False)
+router.register(r'menus', MenuView, 'menu')
 
 urlpatterns = [
+    path('', include(router.urls)),
     # Requests to http://localhost:8000/register will be routed to the register_user function
     path('register', register_user),
     # Requests to http://localhost:8000/login will be routed to the login_user function
