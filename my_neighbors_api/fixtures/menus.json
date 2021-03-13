@@ -1,0 +1,20 @@
+[
+  {
+    "model": "my_nieghbors_api.menu",
+    "pk": 1,
+    "fields": {
+        "name": "Fancy Post",
+        "ready_eat": "2020-12-13T03:13:56.670856Z",
+        "foodImgUrl": "posts/1-937b5a26-8e5c-42b7-9702-d9c977abaa27",
+        "delivery": 0,
+        "pick_ip": 1,
+        "dine_in": 0,
+        "price": 5.0,
+        "status": 1,
+        "how_many_left": 4,
+        "my_neighbor_user": 3,
+        "category": 2,
+        "ingredients": 1
+    }    
+  }
+]
