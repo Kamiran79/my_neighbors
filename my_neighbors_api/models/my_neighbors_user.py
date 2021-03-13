@@ -10,3 +10,4 @@ class MyNeighborsUser(models.Model):
   state = models.CharField(max_length=2)
   zipCode = models.CharField(max_length=5)
   profile_imgage_url = models.ImageField(blank=True)
+  telephone = models.CharField(max_length=15, blank=True)
