@@ -7,7 +7,7 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
-from my_neighbors_api.models import Menu, MyNeighborsUser, Category, Ingredient
+from my_neighbors_api.models import Menu, MyNeighborsUser, Category, Ingredient, my_neighbors_user
 
 class MenuView(ViewSet):
   """My Neighbors Menus"""
@@ -33,6 +33,17 @@ class MenuView(ViewSet):
         """
         menus = Menu.objects.all()
 
+        #Chef get menu list
+        user_id = self.request.query_params.get('user_id', None)
+
+        #This is to get menu list for a user
+        zipCode = self.request.query_params.get('zipCode', None)
+        if zipCode is not None:
+            menus = menus.filter(my_neighbor_user__zipCode = zipCode)
+            menus = menus.filter(status = True)
+
+        if user_id is not None:
+            menus = menus.filter(my_neighbor_user__user = user_id)
         # Note the addtional `many=True` argument to the
         # serializer. It's needed when you are serializing
         # a list of objects instead of a single object.
