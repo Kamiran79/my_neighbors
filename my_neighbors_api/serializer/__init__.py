@@ -1,0 +1,1 @@
+from .menuRating import MenuRatingSerializer

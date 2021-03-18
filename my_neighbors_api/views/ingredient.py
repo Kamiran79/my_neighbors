@@ -1,12 +1,12 @@
 """View module for handling requests about tags"""
 from django.core.exceptions import ValidationError
 from rest_framework import status
-from django.http import HttpResponseServerError, response
+from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from my_neighbors_api.models import Ingredient, ingredient
+from my_neighbors_api.models import Ingredient
 
 class IngredientsViewSet(ViewSet):
   """ Ingredients"""
@@ -27,7 +27,7 @@ class IngredientsViewSet(ViewSet):
         except ValidationError as ex:
           return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
 
-  def destory(self, request, pk=None):
+  def destroy(self, request, pk=None):
         """Handle DELETE requests for a single ingredient
         Returns:
             Response -- 200, 404, or 500 status code
