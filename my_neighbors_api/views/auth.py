@@ -47,6 +47,14 @@ def register_user(request):
     # Load the JSON string of the request body into a dict
     req_body = json.loads(request.body.decode())
 
+    # check if user exists in db
+    user_exists = User.objects.filter(email=req_body['email']).exists()
+
+    if user_exists:
+        data = json.dumps({"msg": "user already exists"})
+        return HttpResponse(data, content_type='application/json')
+
+
     # Create a new user by invoking the `create_user` helper method
     # on Django's built-in User model
     new_user = User.objects.create_user(
@@ -55,6 +63,8 @@ def register_user(request):
         password=req_body['password'],
         first_name=req_body['first_name'],
         last_name=req_body['last_name'],
+        is_active=True,
+        is_staff=req_body['isChef']
     )
 
     # Now save the extra info in the levelupapi_gamer table
@@ -77,3 +87,33 @@ def register_user(request):
     # Return the token to the client
     data = json.dumps({"token": token.key})
     return HttpResponse(data, content_type='application/json')      
+
+@csrf_exempt
+def is_current_user_admin(request):
+
+    req_body = json.loads(request.body.decode())
+
+    try:
+        user_id = Token.objects.get(key=req_body['token']).user_id
+        is_admin = User.objects.get(pk=user_id).is_staff
+        data = json.dumps({"is_user_admin": is_admin})
+        return HttpResponse(data, content_type="application/json")
+    except Token.DoesNotExist:
+        data = json.dumps(
+            {"valid": False, "msg": "No currently authenticated user."}
+        )
+        return HttpResponse(data, content_type="application/json")
+
+@csrf_exempt
+def get_current_user(request):
+
+    req_body = json.loads(request.body.decode())
+
+    try:
+        user_id = Token.objects.get(key=req_body['token']).user_id
+        data = json.dumps({"user_id": user_id})
+        return HttpResponse(data, content_type="application/json")
+    except Token.DoesNotExist:
+        data = json.dumps(
+            {"valid": False, "msg": "No currently authenticated user."})
+        return HttpResponse(data, content_type='application/json')
