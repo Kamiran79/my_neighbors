@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from my_neighbors_api.views.auth import get_current_user
 from django import urls
 from django.contrib import admin
 from django.db import router
@@ -21,6 +22,8 @@ from django.conf.urls import include
 from my_neighbors_api.views import register_user, login_user
 from rest_framework import routers
 from my_neighbors_api.views import MenuView, CategoriesViewSet, IngredientsViewSet, MenuRatingViewSet
+from my_neighbors_api.views import get_current_user, is_current_user_admin
+
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'menus', MenuView, 'menu')
@@ -35,5 +38,7 @@ urlpatterns = [
     # Requests to http://localhost:8000/login will be routed to the login_user function
     path('login', login_user),
     path('api-auth', include('rest_framework.urls', namespace='rest_framework')),
+    path('get_current_user', get_current_user),
+    path('is_admin', is_current_user_admin),    
     path('admin/', admin.site.urls),
 ]

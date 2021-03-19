@@ -1,5 +1,5 @@
-from .auth import login_user
-from .auth import register_user
+from .auth import login_user, get_current_user
+from .auth import register_user, is_current_user_admin
 from .menu import MenuView
 from .category import CategoriesViewSet
 from .ingredient import IngredientsViewSet
