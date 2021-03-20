@@ -7,6 +7,6 @@
       "database": "db.sqlite3"
     }
   ],
-  "python.pythonPath": "/home/kamiran/.pyenv/versions/3.8.1/bin/python",
+  "python.pythonPath": "/home/kamiran/.local/share/virtualenvs/my_neighbors-140kYF7k/bin/python",
   "python.linting.pylintEnabled": true
 }

@@ -22,6 +22,7 @@ def login_user(request):
         # Use the built-in authenticate method to verify
         username = req_body['username']
         password = req_body['password']
+        isStaff = req_body['is_staf']
         authenticated_user = authenticate(username=username, password=password)
 
         # If authentication was successful, respond with their token
@@ -95,6 +96,9 @@ def is_current_user_admin(request):
 
     try:
         user_id = Token.objects.get(key=req_body['token']).user_id
+        # I Can now know if the user is chef or not
+        my_neighbors_user = MyNeighborsUser.objects.get(user_id = user_id)
+        print(my_neighbors_user.isChef)
         is_admin = User.objects.get(pk=user_id).is_staff
         data = json.dumps({"is_user_admin": is_admin})
         return HttpResponse(data, content_type="application/json")
