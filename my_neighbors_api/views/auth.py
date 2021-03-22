@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
-from my_neighbors_api.models import MyNeighborsUser
+from my_neighbors_api.models import MyNeighborsUser, my_neighbors_user
 
 @csrf_exempt
 def login_user(request):
@@ -22,7 +22,7 @@ def login_user(request):
         # Use the built-in authenticate method to verify
         username = req_body['username']
         password = req_body['password']
-        isStaff = req_body['is_staf']
+        #isStaff = req_body['is_staf']
         authenticated_user = authenticate(username=username, password=password)
 
         # If authentication was successful, respond with their token
@@ -115,7 +115,25 @@ def get_current_user(request):
 
     try:
         user_id = Token.objects.get(key=req_body['token']).user_id
-        data = json.dumps({"user_id": user_id})
+        my_neighbors_user = MyNeighborsUser.objects.get(user_id = user_id)
+        zipcode = my_neighbors_user.zipCode        
+        data = json.dumps({"user_id": user_id, "zipcode": zipcode})
+        return HttpResponse(data, content_type="application/json")
+    except Token.DoesNotExist:
+        data = json.dumps(
+            {"valid": False, "msg": "No currently authenticated user."})
+        return HttpResponse(data, content_type='application/json')
+
+@csrf_exempt
+def get_current_user_zipcode(request):
+
+    req_body = json.loads(request.body.decode())
+
+    try:
+        user_id = Token.objects.get(key=req_body['token']).user_id
+        my_neighbors_user = MyNeighborsUser.objects.get(user_id = user_id)
+        zipcode = my_neighbors_user.zipCode        
+        data = json.dumps({"zipcode": zipcode})
         return HttpResponse(data, content_type="application/json")
     except Token.DoesNotExist:
         data = json.dumps(
