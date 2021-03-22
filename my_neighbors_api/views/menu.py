@@ -36,14 +36,24 @@ class MenuView(ViewSet):
         #Chef get menu list
         user_id = self.request.query_params.get('user_id', None)
 
+        user = self.request.query_params.get('user', None)
+
+        # These filters all you to do http://localhost:8000/posts?category=1 or
+        # http://localhost:8000/menus?user=1 or
+        # http://localhost:8000/posts?category=1&user=2
+
+        #http://localhost:8000/menus?zipCode=37122
         #This is to get menu list for a user
         zipCode = self.request.query_params.get('zipCode', None)
         if zipCode is not None:
             menus = menus.filter(my_neighbor_user__zipCode = zipCode)
             menus = menus.filter(status = True)
-
+        #http://localhost:8000/menus?user_id=4
         if user_id is not None:
             menus = menus.filter(my_neighbor_user__user = user_id)
+
+        if user is not None:
+            menus = menus.filter(my_neighbor_user__id=user)
         # Note the addtional `many=True` argument to the
         # serializer. It's needed when you are serializing
         # a list of objects instead of a single object.
