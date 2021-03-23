@@ -54,7 +54,7 @@ class MenuView(ViewSet):
             menus = menus.filter(my_neighbor_user__user = user_id)
 
         if user is not None:
-            menus = menus.filter(my_neighbor_user__id=user)
+            menus = menus.filter(my_neighbors_user__id=user)
         # Note the addtional `many=True` argument to the
         # serializer. It's needed when you are serializing
         # a list of objects instead of a single object.
@@ -94,6 +94,32 @@ class MenuView(ViewSet):
 
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
+
+  def update(self, request, pk=None):
+      chef = MyNeighborsUser.objects.get(user=request.auth.user)
+      menu = Menu.objects.get(pk=pk)
+      menu.name = request.data["name"]
+      menu.ready_eat = request.data["ready_eat"]
+      #menu.ready_eat = timezone.now()
+      menu.foodImgUrl = request.data["foodImgUrl"]
+      menu.delivery = request.data["delivery"]
+      menu.pick_up = request.data["pick_up"]
+      menu.dine_in = request.data["dine_in"]
+      #menu.delivery = True
+      #menu.pick_up = False
+      #menu.dine_in = True
+      menu.price = request.data["price"]
+      menu.status = request.data["status"]
+      menu.how_many_left = request.data["how_many_left"]
+
+      menu.my_neighbor_user = chef
+
+      category = Category.objects.get(pk=request.data["category"])
+      menu.category = category
+      menu.ingredients.set(request.data["ingredients"])
+      menu.save()
+      return Response({}, status=status.HTTP_204_NO_CONTENT)
+
 
 class MenuViewSerializer(serializers.ModelSerializer):
     """JSON serializer for menus
