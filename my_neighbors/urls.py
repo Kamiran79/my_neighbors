@@ -23,6 +23,7 @@ from my_neighbors_api.views import register_user, login_user
 from rest_framework import routers
 from my_neighbors_api.views import MenuView, CategoriesViewSet, IngredientsViewSet, MenuRatingViewSet, UsersViewSet
 from my_neighbors_api.views import get_current_user, is_current_user_admin, get_current_user_zipcode
+from my_neighbors_api.views import MenuIngredientViewSet
 
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -31,6 +32,7 @@ router.register(r'categories', CategoriesViewSet, 'category')
 router.register(r'ingredients', IngredientsViewSet, 'ingredient')
 router.register(r'menuratings', MenuRatingViewSet, 'menurating')
 router.register(r'users', UsersViewSet, 'users')
+router.register(r'menuingredients', MenuIngredientViewSet, 'menuingredients')
 
 urlpatterns = [
     path('', include(router.urls)),
