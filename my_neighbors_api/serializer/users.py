@@ -8,6 +8,6 @@ class UsersSerializer(serializers.ModelSerializer):
         model = MyNeighborsUser
         user = get_user_model()
         posts = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-        fields = ('id', 'user', 'isChef', 'profile_image_url',
-                  'created_on', 'menus')
+        fields = ('id', 'user', 'isChef',
+                  'menus')
         depth = 3

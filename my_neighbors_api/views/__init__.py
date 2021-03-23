@@ -8,3 +8,4 @@ from .ingredient import IngredientsViewSet
 from .menuRating import MenuRatingViewSet
 from .users import UsersViewSet
 from .menu_ingredients import MenuIngredientViewSet
+from .order import Orders
