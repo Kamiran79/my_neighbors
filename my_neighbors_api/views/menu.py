@@ -1,4 +1,5 @@
 """View module for handling requests about game types"""
+from django.utils import timezone
 from django.core.exceptions import ValidationError
 from my_neighbors_api.models.ingredient import Ingredient
 from my_neighbors_api.models.category import Category
@@ -66,13 +67,17 @@ class MenuView(ViewSet):
 
         menu = Menu()
         menu.name = request.data["name"]
-        menu.ready_eat = request.data["ready_eat"]
+        #menu.ready_eat = request.data["ready_eat"]
+        menu.ready_eat = timezone.now()
         menu.foodImgUrl = request.data["foodImgUrl"]
-        menu.delivery = request.data["delivery"]
-        menu.pick_up = request.data["pick_up"]
-        menu.dine_in = request.data["dine_in"]
+        # menu.delivery = request.data["delivery"]
+        # menu.pick_up = request.data["pick_up"]
+        # menu.dine_in = request.data["dine_in"]
+        menu.delivery = True
+        menu.pick_up = False
+        menu.dine_in = True
         menu.price = request.data["price"]
-        menu.status = request.data["status"]
+        menu.status = True
         menu.how_many_left = request.data["how_many_left"]
 
         menu.my_neighbor_user = chef
@@ -102,4 +107,4 @@ class MenuViewSerializer(serializers.ModelSerializer):
         'ready_eat', 'foodImgUrl', 'delivery', 'pick_up', 'dine_in',
         'price', 'status', 'how_many_left', 'my_neighbor_user',
         'category','ingredients')
-        depth = 1
+        depth = 3
