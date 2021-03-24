@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 from django.db.models.deletion import CASCADE, SET_NULL
+from django.utils.translation import gettext_lazy as _
 
 class Menu(models.Model):
 
@@ -11,7 +12,7 @@ class Menu(models.Model):
 
   name = models.CharField(max_length=50)
   ready_eat = models.DateTimeField()
-  foodImgUrl = models.ImageField(blank=True)
+  foodImgUrl = models.ImageField(upload_to='menus/', blank=True, null=True)
   delivery = models.BooleanField()
   pick_up = models.BooleanField()
   dine_in = models.BooleanField()

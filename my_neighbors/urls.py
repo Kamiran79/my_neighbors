@@ -13,18 +13,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from my_neighbors_api.views.auth import get_current_user
 from django import urls
 from django.contrib import admin
 from django.db import router
 from django.urls import path
-from django.conf.urls import include
-from my_neighbors_api.views import register_user, login_user
+from django.conf.urls import include, url
+from django.conf.urls.static import static
 from rest_framework import routers
+from my_neighbors_api.views import register_user, login_user
 from my_neighbors_api.views import MenuView, CategoriesViewSet, IngredientsViewSet, MenuRatingViewSet, UsersViewSet
 from my_neighbors_api.views import get_current_user, is_current_user_admin, get_current_user_zipcode
 from my_neighbors_api.views import MenuIngredientViewSet
 from my_neighbors_api.views import *
+from my_neighbors_api.models import *
 
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -46,4 +49,4 @@ urlpatterns = [
     path('get_current_user', get_current_user),
     path('is_admin', is_current_user_admin),    
     path('admin/', admin.site.urls),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
