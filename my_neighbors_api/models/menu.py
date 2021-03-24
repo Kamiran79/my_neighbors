@@ -19,6 +19,7 @@ class Menu(models.Model):
   price = models.FloatField()
   status = models.BooleanField()
   how_many_left = models.IntegerField()
+  content = models.TextField(blank=True, null=True)
   my_neighbor_user = models.ForeignKey("MyNeighborsUser",
     on_delete=CASCADE,
     related_name="menus",

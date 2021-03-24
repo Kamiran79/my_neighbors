@@ -100,6 +100,7 @@ class MenuView(ViewSet):
         new_menu.price = request.data["price"]
         new_menu.status = True
         new_menu.how_many_left = request.data["how_many_left"]
+        new_menu.content = request.data["content"]
 
         new_menu.my_neighbor_user = chef
 
@@ -128,7 +129,6 @@ class MenuView(ViewSet):
       if request.data['foodImgUrl'] is not "":
         if image_path[-1] == menu_image:
             image_data = image_path[1]
-
         # Format new post image
         elif request.data['foodImgUrl']:
             format, imgstr = request.data['foodImgUrl'].split(';base64,')
@@ -140,6 +140,7 @@ class MenuView(ViewSet):
       
       menu.name = request.data["name"]
       menu.ready_eat = request.data["ready_eat"]
+      menu.content = request.data["content"]
       #menu.ready_eat = timezone.now()
       
     #   menu.delivery = request.data["delivery"]
@@ -160,6 +161,24 @@ class MenuView(ViewSet):
       menu.save()
       return Response({}, status=status.HTTP_204_NO_CONTENT)
 
+  def destroy(self, request, pk=None):
+      try:
+          # If user is an admin (is_staff == true), then we can just
+          # delete the post by pk.  Otherwise, we should verify that
+          # the user owns that post before deleting it.
+          if request.user.is_staff:
+              menu = Menu.objects.get(pk=pk)
+          else:
+              menu = Menu.objects.get(pk=pk, rareuser_id=request.user.id)
+
+          menu.delete()
+          return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+      except Menu.DoesNotExist as ex:
+          return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+
+      except Exception as ex:
+          return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # @action(methods=['POST'], detail=True)
     # def remove_tag(self, request, pk=None):

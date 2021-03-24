@@ -10,7 +10,7 @@ class MenuSerializer(serializers.ModelSerializer):
         category = serializers.PrimaryKeyRelatedField(
             many=False, read_only=True)
         fields = ('id', 'my_neighbors_user', 'category', 'title',
-                  'ready_eat', 'foodImgUrl', 'status', 'ingredients')
+                  'ready_eat', 'foodImgUrl', 'status', 'ingredients','content')
         depth = 2
 
 class MenuViewSerializer(serializers.ModelSerializer):
@@ -24,5 +24,5 @@ class MenuViewSerializer(serializers.ModelSerializer):
         fields = ('id', 'url', 'name',
         'ready_eat', 'foodImgUrl', 'delivery', 'pick_up', 'dine_in',
         'price', 'status', 'how_many_left', 'my_neighbor_user',
-        'category','ingredients')
+        'category','ingredients','content')
         depth = 3        
