@@ -116,8 +116,9 @@ def get_current_user(request):
     try:
         user_id = Token.objects.get(key=req_body['token']).user_id
         my_neighbors_user = MyNeighborsUser.objects.get(user_id = user_id)
-        zipcode = my_neighbors_user.zipCode        
-        data = json.dumps({"user_id": user_id, "zipcode": zipcode})
+        zipcode = my_neighbors_user.zipCode  
+        chef_user_id = my_neighbors_user.id
+        data = json.dumps({"user_id": user_id, "zipcode": zipcode, "chef_user_id": chef_user_id})
         return HttpResponse(data, content_type="application/json")
     except Token.DoesNotExist:
         data = json.dumps(

@@ -32,7 +32,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('id', 'url', 'reserved_date', 'note', 'user_order', 'menu_order'
+        fields = ('id', 'url', 'reserved_date', 'note', 'user_order', 'menu_order', 'chef_order'
         , 'delivery_date', 'total_cost', 'status', 'order_type' )
         depth = 1
 
@@ -127,8 +127,14 @@ class Orders(ViewSet):
                 }
             ]
         """
-        user_order = MyNeighborsUser.objects.get(user=request.auth.user)
-        orders = Order.objects.filter(user_order=user_order)
+        #http://localhost:8000/orders?chef_order=13 chef can get all his orders
+        chef_order = self.request.query_params.get('chef_order', None)
+        if chef_order is not None:
+            orders = Order.objects.filter(chef_order__user=chef_order)
+        else:
+            #http://localhost:8000/orders user can get all his orders
+            user_order = MyNeighborsUser.objects.get(user=request.auth.user)
+            orders = Order.objects.filter(user_order=user_order)
 
         menu = self.request.query_params.get('menu_id', None)
         if menu is not None:
@@ -148,6 +154,12 @@ class Orders(ViewSet):
       order.note = request.data["note"]
       order.user_order = user_order
       menu_order = Menu.objects.get(pk=request.data["menu_order"])
+      #print(menu_order.my_neighbor_user.auth.user)
+
+      #chef_order = MyNeighborsUser.objects.get(pk=menu_order.my_neighbor_user)
+      chef_order = menu_order.my_neighbor_user
+      order.chef_order = chef_order
+      #print(chef_user_id)
       order.menu_order = menu_order
       order.delivery_date = request.data["delivery_date"]
       order.total_cost = request.data["total_cost"]
