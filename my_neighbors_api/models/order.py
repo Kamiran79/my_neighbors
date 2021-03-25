@@ -19,6 +19,14 @@ class Order(models.Model):
     null=True,
     blank=True
   )
+  chef_order = models.ForeignKey("MyNeighborsUser",
+    on_delete=SET_NULL,
+    related_name="chef_orders",
+    related_query_name="chef_order",
+    null=True,
+    blank=True
+  )
+
   reserved_date = models.DateTimeField()
   how_many = models.IntegerField()
   # this will be when the food is ready for your order.
