@@ -30,7 +30,7 @@ class Order(models.Model):
   reserved_date = models.DateTimeField()
   how_many = models.IntegerField()
   # this will be when the food is ready for your order.
-  delivery_date = models.TimeField(blank=True)
+  delivery_date = models.TimeField(blank=True, null=True)
   isConfirmed = models.BooleanField(blank=True) # Chef confirm that making the order - transaction the fee to the owner bank
   total_cost = models.FloatField()
   status = models.CharField(max_length=20) #Cooking , Ready for Pickup, Complete
