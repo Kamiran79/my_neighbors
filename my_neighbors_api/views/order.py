@@ -2,6 +2,7 @@
 import datetime
 from django.http import HttpResponseServerError
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
@@ -33,8 +34,9 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ('id', 'url', 'reserved_date', 'note', 'user_order', 'menu_order', 'chef_order'
-        , 'delivery_date', 'total_cost', 'status', 'order_type' )
-        depth = 1
+          , 'delivery_date', 'total_cost', 'status', 'order_type', 'how_many'
+          , 'isConfirmed', 'isDelivered_user', 'isDelivered_chef' )
+        depth = 3
 
 
 class Orders(ViewSet):
@@ -63,8 +65,18 @@ class Orders(ViewSet):
             }
         """
         try:
-            user_order = MyNeighborsUser.objects.get(user=request.auth.user)
-            order = Order.objects.get(pk=pk, user_order=user_order)
+            # chef_order = self.request.query_params.get('chef_order', None)
+            # if chef_order is not None:
+            #     order = Order.objects.get(pk=pk, chef_order__user=chef_order)
+            # else:
+            #     #http://localhost:8000/orders user can get all his orders
+            #     user_order = MyNeighborsUser.objects.get(user=request.auth.user)
+                # order = Order.objects.get(pk=pk, user_order=user_order)
+            order = Order.objects.get(pk=pk)    
+
+
+            #user_order = MyNeighborsUser.objects.get(user=request.auth.user)
+            #order = Order.objects.get(pk=pk, user_order=user_order)
             serializer = OrderSerializer(order, context={'request': request})
             return Response(serializer.data)
 
@@ -94,9 +106,23 @@ class Orders(ViewSet):
         @apiSuccessExample {json} Success
             HTTP/1.1 204 No Content
         """
-        customer = Customer.objects.get(user=request.auth.user)
-        order = Order.objects.get(pk=pk, customer=customer)
-        order.payment_type = request.data["payment_type"]
+        #customer = Customer.objects.get(user=request.auth.user)
+        #user_order = MyNeighborsUser.objects.get(user=request.auth.user)
+
+        #order = Order()
+        order = Order.objects.get(pk=pk)
+        
+        
+        if request.data.get("isDelivered_user") is not None:
+            order.isDelivered_user = request.data["isDelivered_user"]
+        if request.data.get("isDelivered_chef") is not None:
+            order.isDelivered_chef = request.data["isDelivered_chef"]
+        if request.data.get("isConfirmed") is not None:
+            order.isConfirmed = request.data["isConfirmed"]
+        if request.data.get("status") is not None:
+            order.status = request.data["status"]            
+
+        #order.payment_type = request.data["payment_type"]
         order.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
@@ -149,7 +175,7 @@ class Orders(ViewSet):
       user_order = MyNeighborsUser.objects.get(user=request.auth.user)
 
       order = Order()
-      order.reserved_date = request.data["reserved_date"]
+      order.reserved_date = timezone.now()
       order.how_many = request.data["how_many"]
       order.note = request.data["note"]
       order.user_order = user_order
@@ -161,7 +187,7 @@ class Orders(ViewSet):
       order.chef_order = chef_order
       #print(chef_user_id)
       order.menu_order = menu_order
-      order.delivery_date = request.data["delivery_date"]
+      #order.delivery_date = request.data["delivery_date"]
       order.total_cost = request.data["total_cost"]
       order.status = request.data["status"]
       order.order_type = request.data["order_type"]
