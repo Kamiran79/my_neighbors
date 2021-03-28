@@ -126,7 +126,7 @@ class MenuView(ViewSet):
       menu = Menu.objects.get(pk=pk)
       menu_image = Menu.objects.get(pk=pk).foodImgUrl.name
       image_path = request.data['foodImgUrl'].split('media/')
-      if request.data['foodImgUrl'] is not "":
+      if request.data['foodImgUrl'] != "":
         if image_path[-1] == menu_image:
             image_data = image_path[1]
         # Format new post image
