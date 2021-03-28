@@ -120,7 +120,9 @@ class Orders(ViewSet):
         if request.data.get("isConfirmed") is not None:
             order.isConfirmed = request.data["isConfirmed"]
         if request.data.get("status") is not None:
-            order.status = request.data["status"]            
+            order.status = request.data["status"]
+        if request.data.get("delivery_date") is not None:
+            order.delivery_date = request.data["delivery_date"]                           
 
         #order.payment_type = request.data["payment_type"]
         order.save()
